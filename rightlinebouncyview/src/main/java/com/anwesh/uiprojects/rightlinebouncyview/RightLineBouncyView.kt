@@ -208,4 +208,13 @@ class RightLineBouncyView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : RightLineBouncyView {
+            val view : RightLineBouncyView = RightLineBouncyView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
