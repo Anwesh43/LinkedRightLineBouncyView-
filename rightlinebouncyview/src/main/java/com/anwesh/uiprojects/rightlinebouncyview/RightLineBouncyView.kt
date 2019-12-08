@@ -183,4 +183,26 @@ class RightLineBouncyView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : RightLineBouncyView) {
+
+        private val animator : Animator = Animator(view)
+        private val rlb : RightLineBouncy = RightLineBouncy(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            rlb.draw(canvas, paint)
+            animator.animate {
+                rlb.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            rlb.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
