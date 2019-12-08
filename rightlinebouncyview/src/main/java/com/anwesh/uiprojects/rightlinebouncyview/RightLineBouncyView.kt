@@ -26,3 +26,31 @@ fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
 fun Float.cosify() : Float = 1f - Math.cos(this * Math.PI * 0.5f + Math.PI / 2).toFloat()
+fun Float.fromTo(from : Float, to : Float) : Float = from + (to - from) * this
+
+fun Canvas.drawRightLineBouncy(scale : Float, size : Float, paint : Paint) {
+    val sf : Float = scale.sinify()
+    val sc : Float = scale.divideScale(1, 2).cosify()
+    for (j in 0..1) {
+        save()
+        rotate(sf.fromTo(90f * j, 45f))
+        drawLine(0f, 0f, 0f, -size, paint)
+        restore()
+    }
+    val r : Float = size / rFactor
+    drawCircle(0f, 0f, r * sc, paint)
+}
+
+fun Canvas.drawRLBNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    save()
+    translate(w / 2, gap * (i + 1))
+    drawRightLineBouncy(scale, size, paint)
+    restore()
+}
